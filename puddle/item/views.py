@@ -10,7 +10,6 @@ def detail(request, pk):
     item = get_object_or_404(Item, pk=pk)
     related_items = Item.objects.filter(category=item.category, is_sold=True).exclude(pk=pk)[0:3]
 
-
     return render(request, 'item/detail.html', {
         'item': item,
         'related_items': related_items
@@ -36,3 +35,10 @@ def new(request):
         'title': 'Новый товар',
     })
 
+
+@login_required
+def delete(request, pk):
+    item = get_object_or_404(Item, pk=pk, created_by=request.user)
+    item.delete()
+
+    return redirect('dashboard:index')
