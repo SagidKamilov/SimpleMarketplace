@@ -2,15 +2,13 @@ version: '3.8'
 
 services:
   puddle:
-    build: .
-    command: ["gunicorn", "--bind", "0.0.0.0:8000", "${NAME_PROJECT}.wsgi:application"]
+    build: ./puddle
+    command: "gunicorn puddle.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - .:/src
     ports:
       - "8000:8000"
-    environment:
-      - DJANGO_SETTINGS_MODULE=${NAME_PROJECT}.settings
-#      - DJANGO_SECRET_KEY=your_secret_key Пока не используется
-      - DJANGO_PORT=8000
+    env_file:
+      - puddle/.env.dev
 
 
